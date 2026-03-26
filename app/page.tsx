@@ -5,11 +5,11 @@ export default function Home() {
     <div className="min-h-screen flex flex-col lg:flex-row bg-white text-black">
 
       {/* LEFT SIDE */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-10">
-        <div className="w-full max-w-md">
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-6 md:px-10 py-8 md:py-12">
+        <div className="w-full max-w-md sm:max-w-lg">
 
           {/* Top Bar */}
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
             <h1 className="font-semibold text-lg">GFS</h1>
             <p className="text-sm">
               Already have an account?{" "}
@@ -18,19 +18,19 @@ export default function Home() {
           </div>
 
           {/* Heading */}
-          <h2 className="text-2xl font-bold mb-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
             Explore our funds today
           </h2>
-          <p className="mb-6">
+          <p className="text-sm sm:text-base mb-6">
             Create your free account and view our funds in just a few steps.
           </p>
 
           {/* FORM */}
           <form className="space-y-4">
 
-            {/* First + Last Name */}
-            <div className="flex gap-4">
-              <div className="w-1/2">
+            {/* Name */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="w-full">
                 <label className="text-sm mb-1 block">First Name</label>
                 <input
                   type="text"
@@ -38,7 +38,7 @@ export default function Home() {
                 />
               </div>
 
-              <div className="w-1/2">
+              <div className="w-full">
                 <label className="text-sm mb-1 block">Last Name</label>
                 <input
                   type="text"
@@ -76,12 +76,12 @@ export default function Home() {
             </div>
 
             {/* Button */}
-            <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">
+            <button className="w-full bg-blue-600 text-white py-3 md:py-4 rounded-lg text-sm md:text-base hover:bg-blue-700 transition">
               Sign up
             </button>
 
             {/* Terms */}
-            <p className="text-xs">
+            <p className="text-xs sm:text-sm">
               I have read and agree to Terms of Service and Privacy Notice.
             </p>
 
@@ -94,28 +94,36 @@ export default function Home() {
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-10 bg-gray-50">
-        <div className="max-w-md">
+      {/* RIGHT SIDE (CARD DESIGN) */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-10 bg-gray-50">
+        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 max-w-md w-full">
 
           {/* Image */}
           <Image
-            src="/my-image.jpg"
+            src="/myimage.jpg"
             alt="finance"
             width={500}
             height={300}
-            className="rounded-2xl shadow-lg mb-6"
+            className="w-full h-auto rounded-xl mb-4"
           />
 
-          {/* Text */}
-          <h3 className="text-xl font-semibold mb-4">
+          {/* Slider Dots */}
+          <div className="flex justify-center gap-2 mb-4">
+            <span className="w-2 h-2 bg-gray-300 rounded-full"></span>
+            <span className="w-6 h-2 bg-blue-600 rounded-full"></span>
+            <span className="w-2 h-2 bg-gray-300 rounded-full"></span>
+          </div>
+
+          {/* Heading */}
+          <h3 className="text-lg sm:text-xl font-semibold mb-3 text-center">
             Consistently Performing Portfolios
           </h3>
 
-          <ul className="space-y-2">
-            <li>✔ Lorem ipsum dolor sit amet</li>
-            <li>✔ Lorem ipsum dolor sit amet</li>
-            <li>✔ Lorem ipsum dolor sit amet</li>
+          {/* List */}
+          <ul className="space-y-2 text-sm sm:text-base text-gray-600">
+            <li>✔ Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+            <li>✔ Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+            <li>✔ Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
           </ul>
 
         </div>
