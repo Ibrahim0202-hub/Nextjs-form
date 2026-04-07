@@ -1,17 +1,11 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
-
-/* ❌ REMOVE DARK AUTO OVERRIDE (this was causing issues) */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
 
 body {
   background: var(--background);
@@ -19,7 +13,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ✅ FORCE BUTTON TEXT VISIBILITY */
 button {
   color: white;
 }

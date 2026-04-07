@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-export default function Home() {
+export default function SignupPage() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -30,10 +30,8 @@ export default function Home() {
     try {
       setLoading(true);
       setError("");
-
       const res = await fetch("/api/users");
       const data = await res.json();
-
       setUsers(Array.isArray(data) ? data : data.users || []);
     } catch (err) {
       setError("Failed to fetch users ❌");
@@ -49,7 +47,6 @@ export default function Home() {
   const deleteUser = async (id: number) => {
     try {
       setLoading(true);
-
       await fetch("/api/users", {
         method: "DELETE",
         headers: {
@@ -57,7 +54,6 @@ export default function Home() {
         },
         body: JSON.stringify({ id }),
       });
-
       fetchUsers();
     } catch (err) {
       setError("Delete failed ❌");
@@ -82,7 +78,6 @@ export default function Home() {
     try {
       setLoading(true);
       setError("");
-
       const res = await fetch("/api/users", {
         method: "POST",
         headers: {
@@ -95,7 +90,6 @@ export default function Home() {
 
       if (res.ok) {
         setMessage("Signup successful ✅");
-
         setFormData({
           firstName: "",
           lastName: "",
@@ -103,10 +97,9 @@ export default function Home() {
           password: "",
           country: "",
         });
-
         fetchUsers();
       } else {
-        setMessage("Signup failed ❌");
+        setMessage(data.message || "Signup failed ❌");
       }
 
       console.log(data);
@@ -125,22 +118,18 @@ export default function Home() {
       <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-6 md:px-10 py-8 md:py-12">
         <div className="w-full max-w-md sm:max-w-lg">
 
-          {/* ✅ FIXED HEADER */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
-            <h1 className="font-semibold text-lg">GFS</h1>
-
+          {/* ✅ HEADER */}
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="font-semibold text-lg flex items-center gap-2">⚫ GFS</h1>
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
-              <a href="/login" className="text-blue-600 font-medium">
-                Log in
-              </a>
+              <a href="/login" className="text-blue-600 font-medium">Log in</a>
             </p>
           </div>
 
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
             Explore our funds today
           </h2>
-
           <p className="text-sm sm:text-base mb-6">
             Create your free account and view our funds in just a few steps.
           </p>
@@ -148,18 +137,16 @@ export default function Home() {
           {message && (
             <p
               className={`font-semibold mb-3 ${
-                message.includes("successful")
-                  ? "text-green-600"
-                  : "text-red-600"
+                message.includes("successful") ? "text-green-600" : "text-red-600"
               }`}
             >
               {message}
             </p>
           )}
-
           {error && <p className="text-red-500 mb-2">{error}</p>}
           {loading && <p className="text-blue-500 mb-2">Loading...</p>}
 
+          {/* FORM */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="w-full">
@@ -172,7 +159,6 @@ export default function Home() {
                   className="w-full border border-gray-300 rounded-lg p-3"
                 />
               </div>
-
               <div className="w-full">
                 <label className="text-sm mb-1 block">Last Name</label>
                 <input
@@ -233,7 +219,6 @@ export default function Home() {
           {/* USERS LIST */}
           <div className="mt-8">
             <h2 className="text-xl font-bold mb-3">Users List</h2>
-
             {Array.isArray(users) &&
               users.map((user) => (
                 <div
@@ -241,12 +226,9 @@ export default function Home() {
                   className="border p-3 rounded-lg mb-2 flex justify-between items-center"
                 >
                   <div>
-                    <p className="font-semibold">
-                      {user.first_name} {user.last_name}
-                    </p>
+                    <p className="font-semibold">{user.first_name} {user.last_name}</p>
                     <p className="text-sm text-gray-500">{user.email}</p>
                   </div>
-
                   <div className="flex gap-2">
                     <button
                       onClick={() => editUser(user)}
@@ -254,7 +236,6 @@ export default function Home() {
                     >
                       Edit
                     </button>
-
                     <button
                       onClick={() => deleteUser(user.id)}
                       className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
@@ -265,7 +246,6 @@ export default function Home() {
                 </div>
               ))}
           </div>
-
         </div>
       </div>
 
@@ -279,11 +259,9 @@ export default function Home() {
             height={300}
             className="w-full h-auto rounded-xl mb-4"
           />
-
           <h3 className="text-lg font-semibold mb-3 text-center">
             Consistently Performing Portfolios
           </h3>
-
           <ul className="space-y-2 text-sm sm:text-base text-gray-600">
             <li>✔ Lorem ipsum dolor sit amet</li>
             <li>✔ Lorem ipsum dolor sit amet</li>
