@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -18,6 +21,7 @@ export default function LoginPage() {
     });
   };
 
+  // ✅ FIXED LOGIN FUNCTION
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -31,9 +35,14 @@ export default function LoginPage() {
 
     const data = await res.json();
 
-    if (res.ok) {
+    console.log("API RESPONSE:", data);
+
+    // ✅ CHANGED CONDITION HERE
+    if (data && (data.success || data.user)) {
       setMessage("Login successful ✅");
       localStorage.setItem("user", JSON.stringify(data.user));
+
+      router.push("/dashboard"); // ✅ REDIRECT WORKS NOW
     } else {
       setMessage(data.error || "Login failed ❌");
     }
