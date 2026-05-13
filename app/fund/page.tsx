@@ -129,8 +129,8 @@ export default function FundPage() {
         </button>
       </div>
 
-      {/* MAIN */}
-      <div className="flex-1">
+      {/* MAIN - ONLY CHANGE: added min-w-0 */}
+      <div className="flex-1 min-w-0">
 
         {/* TOPBAR */}
         <div className="h-[58px] bg-white border-b border-gray-200 px-4 md:px-6 flex items-center justify-between">
