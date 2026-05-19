@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
-import { pool } from "@/lib/mydb";
+import pool from "@/lib/mydb";
 import bcrypt from "bcryptjs";
+import { requireAuth } from "@/lib/requireAuth";
 
-// ✅ GET USERS
+// ✅ GET USERS (protected)
 export async function GET() {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const auth = await requireAuth();
+    if (auth instanceof NextResponse) return auth;
+
+    const result = await pool.query(
+      "SELECT id, first_name, last_name, email, country FROM users"
+    );
     return NextResponse.json(result.rows);
   } catch (error) {
     console.error(error);
@@ -17,7 +23,6 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
     const { firstName, lastName, email, password, country } = body;
 
     if (!firstName || !email || !password) {
@@ -27,7 +32,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // check existing user
     const existingUser = await pool.query(
       "SELECT * FROM users WHERE email = $1",
       [email]
@@ -40,7 +44,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await pool.query(
