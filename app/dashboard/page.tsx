@@ -25,9 +25,9 @@ export default function Dashboard() {
   const [funds, setFunds] = useState<Fund[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [user, setUser] = useState<User | null>(null); // ✅ Added user state
+  const [user, setUser] = useState<User | null>(null);
 
-  // ✅ Added auth check
+  // ✅ Auth check
   useEffect(() => {
     const checkAuth = async () => {
       const res = await fetch("/api/me");
@@ -41,6 +41,7 @@ export default function Dashboard() {
     checkAuth();
   }, []);
 
+  // ✅ Fetch funds
   useEffect(() => {
     const fetchFunds = async () => {
       try {
@@ -60,6 +61,12 @@ export default function Dashboard() {
     fetchFunds();
   }, []);
 
+  // ✅ Logout function
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" });
+    router.push("/login");
+  };
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#f6f7fb]">
 
@@ -78,7 +85,8 @@ export default function Dashboard() {
             <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">⚙️ Admin Panel</li>
           </ul>
         </div>
-        <button onClick={() => router.push("/")} className="text-red-500 text-sm font-medium">Logout</button>
+        {/* ✅ Fixed logout */}
+        <button onClick={handleLogout} className="text-red-500 text-sm font-medium">Logout</button>
       </div>
 
       {/* DESKTOP SIDEBAR */}
@@ -92,7 +100,8 @@ export default function Dashboard() {
             <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">⚙️ Admin Panel</li>
           </ul>
         </div>
-        <button onClick={() => router.push("/")} className="text-red-500 text-sm font-medium">Logout</button>
+        {/* ✅ Fixed logout */}
+        <button onClick={handleLogout} className="text-red-500 text-sm font-medium">Logout</button>
       </div>
 
       {/* MAIN */}
@@ -150,11 +159,10 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* LOADING / ERROR */}
             {loading && <p className="text-blue-500">Loading funds...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
-            {/* FUND CARDS - DYNAMIC */}
+            {/* FUND CARDS */}
             {funds.map((fund) => (
               <div key={fund.id} className="bg-white rounded-2xl p-4 md:p-6 mb-5 border shadow-sm flex flex-col md:flex-row gap-4 md:justify-between">
                 <div className="flex gap-3">
@@ -163,7 +171,6 @@ export default function Dashboard() {
                     <h2 className="font-semibold text-sm md:text-lg">{fund.fund_name}</h2>
                     <p className="text-gray-500 text-xs md:text-sm mb-1">{fund.description}</p>
                     <p className="text-xs text-gray-400 mb-3">Category: {fund.category}</p>
-
                     <div className="grid grid-cols-2 gap-y-3 md:grid-cols-4 md:gap-10 text-xs md:text-sm mb-4">
                       <div>
                         <p className="text-gray-400">Risk</p>
@@ -184,7 +191,6 @@ export default function Dashboard() {
                         <p className="font-semibold">{fund.category}</p>
                       </div>
                     </div>
-
                     <div className="flex flex-wrap gap-2 md:gap-3">
                       <button className="border px-3 py-1.5 rounded-full text-xs md:text-sm">View</button>
                       <button onClick={() => router.push("/fund")} className="bg-[#0f172a] text-white px-3 py-1.5 rounded-full text-xs md:text-sm">Invest</button>
@@ -199,7 +205,6 @@ export default function Dashboard() {
 
           {/* RIGHT PANEL */}
           <div className="w-full md:w-80 px-4 md:px-6 py-6 md:py-8 space-y-5">
-
             <div className="relative rounded-2xl overflow-hidden h-[180px]">
               <img src="https://images.unsplash.com/photo-1674027444485-cec3da58eef4" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-br from-pink-200/60 via-orange-200/60 to-yellow-200/60"></div>
@@ -210,7 +215,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* TOP MOVERS - DYNAMIC */}
+            {/* TOP MOVERS */}
             <div className="bg-white p-4 md:p-5 rounded-2xl border shadow-sm">
               <h3 className="font-semibold mb-1 text-sm md:text-base">Top Movers</h3>
               <p className="text-gray-400 text-xs md:text-sm mb-3">Highest returns</p>
@@ -226,7 +231,6 @@ export default function Dashboard() {
                   ))}
               </div>
             </div>
-
           </div>
         </div>
       </div>
