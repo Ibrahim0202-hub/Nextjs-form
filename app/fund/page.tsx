@@ -49,6 +49,17 @@ export default function FundPage() {
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
 
+  // ✅ Auth check
+  useEffect(() => {
+    const checkAuth = async () => {
+      const res = await fetch("/api/me");
+      if (!res.ok) {
+        router.push("/login");
+      }
+    };
+    checkAuth();
+  }, []);
+
   useEffect(() => {
     const fetchFunds = async () => {
       try {
@@ -69,6 +80,12 @@ export default function FundPage() {
     fetchFunds();
   }, []);
 
+  // ✅ Logout function
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" });
+    router.push("/login");
+  };
+
   if (loading) return <div className="flex items-center justify-center min-h-screen text-blue-500">Loading...</div>;
   if (error) return <div className="flex items-center justify-center min-h-screen text-red-500">{error}</div>;
 
@@ -88,7 +105,8 @@ export default function FundPage() {
           <li className="px-3 py-2 rounded-lg hover:bg-gray-100">📞 Contact Us</li>
           <li className="px-3 py-2 rounded-lg hover:bg-gray-100">⚙️ Admin Panel</li>
         </ul>
-        <button className="absolute bottom-6 left-5 text-red-500 text-xs">Logout</button>
+        {/* ✅ Fixed logout */}
+        <button onClick={handleLogout} className="absolute bottom-6 left-5 text-red-500 text-xs">Logout</button>
       </div>
 
       {/* DESKTOP SIDEBAR */}
@@ -102,7 +120,8 @@ export default function FundPage() {
             <li className="px-3 py-2 rounded-lg hover:bg-gray-100">⚙️ Admin Panel</li>
           </ul>
         </div>
-        <button onClick={() => router.push("/")} className="text-red-500 text-xs">Logout</button>
+        {/* ✅ Fixed logout */}
+        <button onClick={handleLogout} className="text-red-500 text-xs">Logout</button>
       </div>
 
       {/* MAIN */}
@@ -320,7 +339,7 @@ export default function FundPage() {
             </div>
           </div>
 
-          {/* SIMILAR FUNDS - DYNAMIC */}
+          {/* SIMILAR FUNDS */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 mb-4">
             <p className="text-[11px] font-semibold mb-4">SIMILAR FUNDS</p>
             {allFunds.filter(f => f.id !== fund?.id).map((f) => (
