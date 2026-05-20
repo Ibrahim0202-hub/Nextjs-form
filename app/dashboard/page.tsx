@@ -13,12 +13,33 @@ interface Fund {
   description: string;
 }
 
+// ✅ Added User interface
+interface User {
+  name: string;
+  email: string;
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [funds, setFunds] = useState<Fund[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [user, setUser] = useState<User | null>(null); // ✅ Added user state
+
+  // ✅ Added auth check
+  useEffect(() => {
+    const checkAuth = async () => {
+      const res = await fetch("/api/me");
+      if (!res.ok) {
+        router.push("/login");
+      } else {
+        const data = await res.json();
+        setUser(data.user);
+      }
+    };
+    checkAuth();
+  }, []);
 
   useEffect(() => {
     const fetchFunds = async () => {
