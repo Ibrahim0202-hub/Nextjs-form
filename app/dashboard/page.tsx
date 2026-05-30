@@ -85,7 +85,6 @@ export default function Dashboard() {
             <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">⚙️ Admin Panel</li>
           </ul>
         </div>
-        {/* ✅ Fixed logout */}
         <button onClick={handleLogout} className="text-red-500 text-sm font-medium">Logout</button>
       </div>
 
@@ -100,7 +99,6 @@ export default function Dashboard() {
             <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">⚙️ Admin Panel</li>
           </ul>
         </div>
-        {/* ✅ Fixed logout */}
         <button onClick={handleLogout} className="text-red-500 text-sm font-medium">Logout</button>
       </div>
 
@@ -193,7 +191,8 @@ export default function Dashboard() {
                     </div>
                     <div className="flex flex-wrap gap-2 md:gap-3">
                       <button className="border px-3 py-1.5 rounded-full text-xs md:text-sm">View</button>
-                      <button onClick={() => router.push("/fund")} className="bg-[#0f172a] text-white px-3 py-1.5 rounded-full text-xs md:text-sm">Invest</button>
+                      {/* ✅ Now passes fund ID */}
+                      <button onClick={() => router.push(`/fund/${fund.id}`)} className="bg-[#0f172a] text-white px-3 py-1.5 rounded-full text-xs md:text-sm">Invest</button>
                       <button className="border w-8 h-8 rounded-full flex items-center justify-center text-xs">🔖</button>
                     </div>
                   </div>
