@@ -22,10 +22,15 @@ interface Fund {
   created_at: string;
 }
 
-// ✅ Added Performance interface
 interface Performance {
   year: string;
   value: number;
+}
+
+// ✅ Added User interface
+interface User {
+  name: string;
+  email: string;
 }
 
 export default function FundDetailPage() {
@@ -39,8 +44,8 @@ export default function FundDetailPage() {
   const [allFunds, setAllFunds] = useState<Fund[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  // ✅ Dynamic chart data
   const [chartData, setChartData] = useState<Performance[]>([]);
+  const [user, setUser] = useState<User | null>(null); // ✅ user state
 
   const years = 5;
   const finalAmount = fund
@@ -52,11 +57,21 @@ export default function FundDetailPage() {
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
 
-  // ✅ Auth check
+  // ✅ Get initials from name
+  const getInitials = (name: string) => {
+    return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+  };
+
+  // ✅ Auth check + get user from session
   useEffect(() => {
     const checkAuth = async () => {
       const res = await fetch("/api/me");
-      if (!res.ok) router.push("/login");
+      if (!res.ok) {
+        router.push("/login");
+      } else {
+        const data = await res.json();
+        setUser(data.user);
+      }
     };
     checkAuth();
   }, []);
@@ -155,7 +170,10 @@ export default function FundDetailPage() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm">🔔</span>
-            <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-[10px]">TC</div>
+            {/* ✅ Dynamic user initials from session */}
+            <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-[10px]">
+              {user ? getInitials(user.name) : ".."}
+            </div>
           </div>
         </div>
 
@@ -215,7 +233,7 @@ export default function FundDetailPage() {
             </div>
           </div>
 
-          {/* GRAPH - ✅ Now dynamic */}
+          {/* GRAPH */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 mb-4">
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -256,7 +274,7 @@ export default function FundDetailPage() {
             </div>
           </div>
 
-          {/* MONTH TABLE */}
+          {/* MONTH TABLE - ✅ Dynamic years from chartData */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 mb-4">
             <p className="text-[11px] font-semibold mb-4">MONTH ON MONTH RETURNS</p>
             <div className="overflow-x-auto">
@@ -264,22 +282,26 @@ export default function FundDetailPage() {
                 <thead className="bg-[#fafafa]">
                   <tr>
                     <th className="p-2 text-left">Month</th>
-                    <th className="p-2">2025</th>
-                    <th className="p-2">2024</th>
+                    {/* ✅ Dynamic years from DB */}
+                    {chartData.slice(-2).reverse().map((d, i) => (
+                      <th key={i} className="p-2">{d.year}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
                   {months.map((month, i) => (
                     <tr key={i} className="border-t border-gray-100">
                       <td className="p-2 text-left">{month}</td>
-                      <td className="p-2 text-gray-300 text-center">—</td>
-                      <td className="p-2 text-gray-300 text-center">—</td>
+                      {chartData.slice(-2).map((_, j) => (
+                        <td key={j} className="p-2 text-gray-300 text-center">—</td>
+                      ))}
                     </tr>
                   ))}
                   <tr className="border-t border-gray-100 bg-[#fafafa]">
                     <td className="p-2 font-medium">YTD</td>
-                    <td className="p-2 text-gray-300 text-center">—</td>
-                    <td className="p-2 text-gray-300 text-center">—</td>
+                    {chartData.slice(-2).map((_, j) => (
+                      <td key={j} className="p-2 text-gray-300 text-center">—</td>
+                    ))}
                   </tr>
                 </tbody>
               </table>
