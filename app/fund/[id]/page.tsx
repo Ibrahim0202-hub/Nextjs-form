@@ -27,7 +27,18 @@ interface Performance {
   value: number;
 }
 
-// ✅ Added User interface
+interface MonthlyReturn {
+  year: number;
+  month: string;
+  return_value: number;
+}
+
+interface InvestmentDetail {
+  month: string;
+  cutoff_date: string;
+  nav_date: string;
+}
+
 interface User {
   name: string;
   email: string;
@@ -45,7 +56,9 @@ export default function FundDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [chartData, setChartData] = useState<Performance[]>([]);
-  const [user, setUser] = useState<User | null>(null); // ✅ user state
+  const [monthlyReturns, setMonthlyReturns] = useState<MonthlyReturn[]>([]);
+  const [investmentDetails, setInvestmentDetails] = useState<InvestmentDetail[]>([]);
+  const [user, setUser] = useState<User | null>(null);
 
   const years = 5;
   const finalAmount = fund
@@ -57,12 +70,19 @@ export default function FundDetailPage() {
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
 
-  // ✅ Get initials from name
   const getInitials = (name: string) => {
     return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
   };
 
-  // ✅ Auth check + get user from session
+  // ✅ Get return value for specific month and year
+  const getMonthReturn = (month: string, year: number) => {
+    const found = monthlyReturns.find(r => r.month === month && Number(r.year) === year);
+    return found ? `${found.return_value}%` : "—";
+  };
+
+  // ✅ Get unique years from monthly returns
+  const returnYears = [...new Set(monthlyReturns.map(r => Number(r.year)))].sort((a, b) => b - a).slice(0, 2);
+
   useEffect(() => {
     const checkAuth = async () => {
       const res = await fetch("/api/me");
@@ -76,33 +96,30 @@ export default function FundDetailPage() {
     checkAuth();
   }, []);
 
-  // ✅ Fetch fund + all funds + performance data
   useEffect(() => {
     const fetchFund = async () => {
       try {
-        const [fundRes, allFundsRes, perfRes] = await Promise.all([
+        const [fundRes, allFundsRes, perfRes, monthlyRes, investRes] = await Promise.all([
           fetch(`/api/fund/${id}`),
           fetch("/api/fund"),
           fetch(`/api/fund/${id}/performance`),
+          fetch(`/api/fund/${id}/monthly-returns`),
+          fetch(`/api/fund/${id}/investment-details`),
         ]);
 
         const fundData = await fundRes.json();
         const allFundsData = await allFundsRes.json();
         const perfData = await perfRes.json();
+        const monthlyData = await monthlyRes.json();
+        const investData = await investRes.json();
 
-        if (fundData.fund) {
-          setFund(fundData.fund);
-        } else {
-          setError("Fund not found");
-        }
+        if (fundData.fund) setFund(fundData.fund);
+        else setError("Fund not found");
 
-        if (allFundsData.funds) {
-          setAllFunds(allFundsData.funds);
-        }
-
-        if (perfData.performance) {
-          setChartData(perfData.performance);
-        }
+        if (allFundsData.funds) setAllFunds(allFundsData.funds);
+        if (perfData.performance) setChartData(perfData.performance);
+        if (monthlyData.monthly_returns) setMonthlyReturns(monthlyData.monthly_returns);
+        if (investData.investment_details) setInvestmentDetails(investData.investment_details);
 
       } catch (err) {
         setError("Failed to load fund data");
@@ -170,7 +187,6 @@ export default function FundDetailPage() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm">🔔</span>
-            {/* ✅ Dynamic user initials from session */}
             <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-[10px]">
               {user ? getInitials(user.name) : ".."}
             </div>
@@ -196,7 +212,6 @@ export default function FundDetailPage() {
               <button className="bg-blue-600 text-white text-[11px] px-4 h-8 rounded-full">Invest Now</button>
             </div>
 
-            {/* RETURN BANNER */}
             <div className="mt-4 bg-[#f7f8fc] border border-gray-100 rounded-xl px-3 py-3 flex items-center justify-between">
               <div>
                 <p className="text-[11px] text-gray-400">Returns since inception</p>
@@ -207,7 +222,6 @@ export default function FundDetailPage() {
               </div>
             </div>
 
-            {/* STATS */}
             <div className="grid grid-cols-3 mt-4 border border-gray-100 rounded-xl overflow-hidden">
               <div className="p-3 border-r border-gray-100">
                 <p className="text-[10px] text-gray-400">Category</p>
@@ -223,7 +237,6 @@ export default function FundDetailPage() {
               </div>
             </div>
 
-            {/* TABS */}
             <div className="flex gap-2 overflow-x-auto mt-4 pb-1">
               {["Returns", "Performance", "Key Metrics", "Fund Details", "Investment Details", "About", "Documents"].map((tab, i) => (
                 <button key={i} className={`whitespace-nowrap px-3 h-8 rounded-full text-[11px] ${i === 0 ? "bg-black text-white" : "bg-gray-100 text-gray-500"}`}>
@@ -274,7 +287,7 @@ export default function FundDetailPage() {
             </div>
           </div>
 
-          {/* MONTH TABLE - ✅ Dynamic years from chartData */}
+          {/* MONTH TABLE - ✅ Fully Dynamic */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 mb-4">
             <p className="text-[11px] font-semibold mb-4">MONTH ON MONTH RETURNS</p>
             <div className="overflow-x-auto">
@@ -282,9 +295,8 @@ export default function FundDetailPage() {
                 <thead className="bg-[#fafafa]">
                   <tr>
                     <th className="p-2 text-left">Month</th>
-                    {/* ✅ Dynamic years from DB */}
-                    {chartData.slice(-2).reverse().map((d, i) => (
-                      <th key={i} className="p-2">{d.year}</th>
+                    {returnYears.map((year) => (
+                      <th key={year} className="p-2">{year}</th>
                     ))}
                   </tr>
                 </thead>
@@ -292,15 +304,20 @@ export default function FundDetailPage() {
                   {months.map((month, i) => (
                     <tr key={i} className="border-t border-gray-100">
                       <td className="p-2 text-left">{month}</td>
-                      {chartData.slice(-2).map((_, j) => (
-                        <td key={j} className="p-2 text-gray-300 text-center">—</td>
-                      ))}
+                      {returnYears.map((year) => {
+                        const val = getMonthReturn(month, year);
+                        return (
+                          <td key={year} className={`p-2 text-center ${val !== "—" ? (parseFloat(val) >= 0 ? "text-green-600" : "text-red-500") : "text-gray-300"}`}>
+                            {val}
+                          </td>
+                        );
+                      })}
                     </tr>
                   ))}
                   <tr className="border-t border-gray-100 bg-[#fafafa]">
                     <td className="p-2 font-medium">YTD</td>
-                    {chartData.slice(-2).map((_, j) => (
-                      <td key={j} className="p-2 text-gray-300 text-center">—</td>
+                    {returnYears.map((year) => (
+                      <td key={year} className="p-2 text-gray-300 text-center">—</td>
                     ))}
                   </tr>
                 </tbody>
@@ -363,6 +380,38 @@ export default function FundDetailPage() {
                   <p>{fund?.risk_level} Risk</p>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* INVESTMENT DETAILS - ✅ Fully Dynamic */}
+          <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 mb-4">
+            <p className="text-[11px] font-semibold mb-4">INVESTMENT DETAILS</p>
+            <p className="text-[10px] text-gray-400 mb-4">* Dates may be subject to change</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-[11px] border border-gray-100">
+                <thead className="bg-[#fafafa]">
+                  <tr>
+                    <th className="p-2 text-left">Type</th>
+                    {investmentDetails.map((d, i) => (
+                      <th key={i} className="p-2">{d.month}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t border-gray-100">
+                    <td className="p-2">Cut-off</td>
+                    {investmentDetails.map((d, i) => (
+                      <td key={i} className="p-2 text-center">{d.cutoff_date}</td>
+                    ))}
+                  </tr>
+                  <tr className="border-t border-gray-100">
+                    <td className="p-2">NAV</td>
+                    {investmentDetails.map((d, i) => (
+                      <td key={i} className="p-2 text-center">{d.nav_date}</td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
