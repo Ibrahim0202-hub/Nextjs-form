@@ -41,7 +41,6 @@ export default function InvestPage() {
   const [investAmount, setInvestAmount] = useState("");
   const [frequency, setFrequency] = useState("One-time");
   const [placing, setPlacing] = useState(false);
-  const [orderSuccess, setOrderSuccess] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -89,7 +88,7 @@ export default function InvestPage() {
     });
     const data = await res.json();
     if (data.success) {
-      setOrderSuccess(true);
+      router.push(`/fund/${id}/invest/order-confirm?amount=${investAmount}&frequency=${frequency}`);
     } else {
       alert("Failed to place order. Please try again.");
     }
@@ -116,7 +115,6 @@ export default function InvestPage() {
         {/* LEFT */}
         <div className="flex-1">
 
-          {/* BACK */}
           <button
             onClick={() => router.back()}
             className="flex items-center gap-1 text-sm text-gray-500 mb-6 hover:text-black"
@@ -261,12 +259,6 @@ export default function InvestPage() {
             >
               {placing ? "Placing..." : "Place Order"}
             </button>
-
-            {orderSuccess && (
-              <p className="text-green-600 text-xs text-center mt-3 font-medium">
-                ✅ Order placed successfully!
-              </p>
-            )}
 
             <p className="text-xs text-gray-400 mt-3 flex gap-1">
               <span>ⓘ</span>
