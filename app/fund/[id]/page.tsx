@@ -74,13 +74,11 @@ export default function FundDetailPage() {
     return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
   };
 
-  // ✅ Get return value for specific month and year
   const getMonthReturn = (month: string, year: number) => {
     const found = monthlyReturns.find(r => r.month === month && Number(r.year) === year);
     return found ? `${found.return_value}%` : "—";
   };
 
-  // ✅ Get unique years from monthly returns
   const returnYears = [...new Set(monthlyReturns.map(r => Number(r.year)))].sort((a, b) => b - a).slice(0, 2);
 
   useEffect(() => {
@@ -209,7 +207,8 @@ export default function FundDetailPage() {
                   </div>
                 </div>
               </div>
-              <button className="bg-blue-600 text-white text-[11px] px-4 h-8 rounded-full">Invest Now</button>
+              {/* ✅ ONLY THIS LINE CHANGED */}
+              <button onClick={() => router.push(`/fund/${id}/invest`)} className="bg-blue-600 text-white text-[11px] px-4 h-8 rounded-full">Invest Now</button>
             </div>
 
             <div className="mt-4 bg-[#f7f8fc] border border-gray-100 rounded-xl px-3 py-3 flex items-center justify-between">
@@ -287,7 +286,7 @@ export default function FundDetailPage() {
             </div>
           </div>
 
-          {/* MONTH TABLE - ✅ Fully Dynamic */}
+          {/* MONTH TABLE */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 mb-4">
             <p className="text-[11px] font-semibold mb-4">MONTH ON MONTH RETURNS</p>
             <div className="overflow-x-auto">
@@ -383,7 +382,7 @@ export default function FundDetailPage() {
             </div>
           </div>
 
-          {/* INVESTMENT DETAILS - ✅ Fully Dynamic */}
+          {/* INVESTMENT DETAILS */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 mb-4">
             <p className="text-[11px] font-semibold mb-4">INVESTMENT DETAILS</p>
             <p className="text-[10px] text-gray-400 mb-4">* Dates may be subject to change</p>
