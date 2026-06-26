@@ -125,8 +125,8 @@ export default function OrderConfirmPage() {
             <h3 className="text-sm font-semibold mb-2">Need Help?</h3>
             <p className="text-xs text-gray-400 mb-4">For any queries or assistance regarding your deposit or investment, please reach to us using the below contact details. Our support team is happy to assist you</p>
             <div className="flex gap-6 text-xs text-gray-500">
-              <span>Toll-free number : <strong>1800-XXX-XXXX</strong></span>
-              <span>Email: <strong className="text-black">abc@gfs.com</strong></span>
+              <span>Toll-free number : <strong>1800-555-0199</strong></span>
+              <span>Email: <strong className="text-black">support@gfs.com</strong></span>
             </div>
           </div>
 
