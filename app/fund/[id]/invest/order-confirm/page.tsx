@@ -62,6 +62,7 @@ export default function OrderConfirmPage() {
           <div className="border border-gray-100 rounded-xl overflow-hidden mb-6">
             {[
               { label: "Investment Amount", value: `$${Number(amount).toLocaleString()}.00` },
+              { label: "Investment Frequency", value: frequency },
               { label: "Status", value: "Pending", orange: true },
               { label: "Date of Investment", value: today },
             ].map((item, i) => (
@@ -108,13 +109,13 @@ export default function OrderConfirmPage() {
           <div className="flex gap-3 mb-8">
             <button
               onClick={() => router.push(`/fund/${id}`)}
-              className="flex-1 border border-gray-200 text-sm py-3 rounded-full hover:bg-gray-50"
+              className="flex-1 border border-gray-200 text-sm py-3 rounded-full hover:bg-gray-50 text-gray-700 font-medium"
             >
               View Fund Details
             </button>
             <button
               onClick={() => router.push("/dashboard")}
-              className="flex-1 border border-gray-200 text-sm py-3 rounded-full hover:bg-gray-50"
+              className="flex-1 border border-gray-200 text-sm py-3 rounded-full hover:bg-gray-50 text-gray-700 font-medium"
             >
               View Order History
             </button>
@@ -125,8 +126,8 @@ export default function OrderConfirmPage() {
             <h3 className="text-sm font-semibold mb-2">Need Help?</h3>
             <p className="text-xs text-gray-400 mb-4">For any queries or assistance regarding your deposit or investment, please reach to us using the below contact details. Our support team is happy to assist you</p>
             <div className="flex gap-6 text-xs text-gray-500">
-              <span>Toll-free number : <strong>1800-XXX-XXXX</strong></span>
-              <span>Email: <strong className="text-black">abc@gfs.com</strong></span>
+              <span>Toll-free number : <strong>1800-555-0199</strong></span>
+              <span>Email: <strong className="text-black">support@gfs.com</strong></span>
             </div>
           </div>
 
