@@ -13,7 +13,6 @@ interface Fund {
   description: string;
 }
 
-// ✅ Added User interface
 interface User {
   name: string;
   email: string;
@@ -27,7 +26,6 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const [user, setUser] = useState<User | null>(null);
 
-  // ✅ Auth check
   useEffect(() => {
     const checkAuth = async () => {
       const res = await fetch("/api/me");
@@ -41,7 +39,6 @@ export default function Dashboard() {
     checkAuth();
   }, []);
 
-  // ✅ Fetch funds
   useEffect(() => {
     const fetchFunds = async () => {
       try {
@@ -61,7 +58,6 @@ export default function Dashboard() {
     fetchFunds();
   }, []);
 
-  // ✅ Logout function
   const handleLogout = async () => {
     await fetch("/api/logout", { method: "POST" });
     router.push("/login");
@@ -80,9 +76,9 @@ export default function Dashboard() {
           <h1 className="text-xl font-bold mb-10 flex items-center gap-2">🪙 GFS</h1>
           <ul className="space-y-3 text-gray-600 text-sm">
             <li className="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg font-medium">🔍 Explore</li>
-            <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">👤 Profile</li>
-            <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">📞 Contact us</li>
-            <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">⚙️ Admin Panel</li>
+            <li onClick={() => router.push("/profile")} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer">👤 Profile</li>
+            <li onClick={() => router.push("/contact")} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer">📞 Contact us</li>
+            <li onClick={() => router.push("/admin")} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer">⚙️ Admin Panel</li>
           </ul>
         </div>
         <button onClick={handleLogout} className="text-red-500 text-sm font-medium">Logout</button>
@@ -94,9 +90,9 @@ export default function Dashboard() {
           <h1 className="text-xl font-bold mb-10 flex items-center gap-2">🪙 GFS</h1>
           <ul className="space-y-3 text-gray-600 text-sm">
             <li className="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg font-medium">🔍 Explore</li>
-            <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">👤 Profile</li>
-            <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">📞 Contact us</li>
-            <li className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg">⚙️ Admin Panel</li>
+            <li onClick={() => router.push("/profile")} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer">👤 Profile</li>
+            <li onClick={() => router.push("/contact")} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer">📞 Contact us</li>
+            <li onClick={() => router.push("/admin")} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer">⚙️ Admin Panel</li>
           </ul>
         </div>
         <button onClick={handleLogout} className="text-red-500 text-sm font-medium">Logout</button>
@@ -191,7 +187,6 @@ export default function Dashboard() {
                     </div>
                     <div className="flex flex-wrap gap-2 md:gap-3">
                       <button className="border px-3 py-1.5 rounded-full text-xs md:text-sm">View</button>
-                      {/* ✅ Now passes fund ID */}
                       <button onClick={() => router.push(`/fund/${fund.id}`)} className="bg-[#0f172a] text-white px-3 py-1.5 rounded-full text-xs md:text-sm">Invest</button>
                       <button className="border w-8 h-8 rounded-full flex items-center justify-center text-xs">🔖</button>
                     </div>
