@@ -149,9 +149,9 @@ export default function FundDetailPage() {
         <h1 className="font-semibold text-sm mb-8">🟡 GFS</h1>
         <ul className="space-y-2 text-[13px] text-gray-500">
           <li onClick={() => router.push("/dashboard")} className="px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">🔍 Explore</li>
-          <li className="px-3 py-2 rounded-lg hover:bg-gray-100">👤 Profile</li>
-          <li className="px-3 py-2 rounded-lg hover:bg-gray-100">📞 Contact Us</li>
-          <li className="px-3 py-2 rounded-lg hover:bg-gray-100">⚙️ Admin Panel</li>
+          <li onClick={() => router.push("/profile")} className="px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">👤 Profile</li>
+          <li onClick={() => router.push("/contact")} className="px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">📞 Contact Us</li>
+          <li onClick={() => router.push("/admin")} className="px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">⚙️ Admin Panel</li>
         </ul>
         <button onClick={handleLogout} className="absolute bottom-6 left-5 text-red-500 text-xs">Logout</button>
       </div>
@@ -162,9 +162,9 @@ export default function FundDetailPage() {
           <h1 className="font-semibold text-sm mb-8">🟡 GFS</h1>
           <ul className="space-y-2 text-[13px] text-gray-500">
             <li onClick={() => router.push("/dashboard")} className="px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">🔍 Explore</li>
-            <li className="px-3 py-2 rounded-lg hover:bg-gray-100">👤 Profile</li>
-            <li className="px-3 py-2 rounded-lg hover:bg-gray-100">📞 Contact Us</li>
-            <li className="px-3 py-2 rounded-lg hover:bg-gray-100">⚙️ Admin Panel</li>
+            <li onClick={() => router.push("/profile")} className="px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">👤 Profile</li>
+            <li onClick={() => router.push("/contact")} className="px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">📞 Contact Us</li>
+            <li onClick={() => router.push("/admin")} className="px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">⚙️ Admin Panel</li>
           </ul>
         </div>
         <button onClick={handleLogout} className="text-red-500 text-xs">Logout</button>
@@ -207,7 +207,6 @@ export default function FundDetailPage() {
                   </div>
                 </div>
               </div>
-              {/* ✅ ONLY THIS LINE CHANGED */}
               <button onClick={() => router.push(`/fund/${id}/invest`)} className="bg-blue-600 text-white text-[11px] px-4 h-8 rounded-full">Invest Now</button>
             </div>
 
